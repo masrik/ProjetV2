@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/background_dark" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:text="javapapers.com"
+        android:textColor="#454545"
+        android:textSize="12sp"
+        android:id="@+id/textView" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher"
+        android:tileMode="repeat"
+        android:layout_above="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="181dp" />
+
+    <ProgressBar
+    android:id="@+id/pBAsync"
+    style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="75dp"
+        android:layout_above="@+id/textView"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
