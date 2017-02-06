@@ -81,10 +81,9 @@ public class SplashscreenAct extends AppCompatActivity {
         @Override
         protected List<Destination> doInBackground(Void... params) {
 
-            String url = "http://voyage2.corellis.eu/api/v2/homev2?lat="+latitude+"&lon="+longitude+"&offset=10";
-            URL urlObj = null;
+            String url = "http://voyage2.corellis.eu/api/v2/homev2?lat="+latitude+"&lon="+longitude+"&offset=50";
             try {
-                urlObj = new URL(url);
+               URL urlObj = new URL(url);
                 HttpURLConnection urlConnection = (HttpURLConnection) urlObj.openConnection();
                 InputStream inputStream = urlConnection.getInputStream();
                 BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
@@ -107,7 +106,6 @@ public class SplashscreenAct extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
-                double offset = jsonObject.getDouble("offset");
                 nombredeDestination = jsonArray.length();
                 for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -124,6 +122,11 @@ public class SplashscreenAct extends AppCompatActivity {
 
 
                 }
+                for(int i = 0; i<listDestination.size(); i++)
+                {
+                    listDestination.get(i).GetDetail();
+                }
+
                 return listDestination;
             } catch (JSONException e) {
                 e.printStackTrace();

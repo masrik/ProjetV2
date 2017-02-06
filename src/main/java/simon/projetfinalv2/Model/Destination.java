@@ -5,13 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -27,8 +31,34 @@ public class Destination implements Serializable{
     private String type;
     private String MainPictureURL;
     private byte[] MainPicture;
-
+    private POI poi;
+    private Parcours parcours;
+    private Ville ville;
     public Destination(){};
+
+    public POI getPoi() {
+        return poi;
+    }
+
+    public void setPoi(POI poi) {
+        this.poi = poi;
+    }
+
+    public Parcours getParcours() {
+        return parcours;
+    }
+
+    public void setParcours(Parcours parcours) {
+        this.parcours = parcours;
+    }
+
+    public Ville getVille() {
+        return ville;
+    }
+
+    public void setVille(Ville ville) {
+        this.ville = ville;
+    }
 
     public  Destination(JSONObject obj, Context context) throws JSONException, IOException {
         id=obj.getString("id");
@@ -39,16 +69,66 @@ public class Destination implements Serializable{
         MainPictureDownload(MainPictureURL,context);
 
     }
+    public void GetDetail()
+    {
+        String url = "";
+        if(type.equals("POI"))
+        {
+            url = "http://voyage2.corellis.eu/api/v2/poi?id="+ id;
+        }
+        if(type.equals("PARCOURS"))
+        {
+           url = "http://voyage2.corellis.eu/api/v2/parcours?id="+id;
+        }
+        if(type.equals("CITY"))
+        {
+            url = "http://voyage2.corellis.eu/api/v2/destination?id="+id;
+        }
+
+        URL urlObj = null;
+        try {
+            urlObj = new URL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) urlObj.openConnection();
+            InputStream inputStream = urlConnection.getInputStream();
+            BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            StringBuilder responseStrBuilder = new StringBuilder();
+            while ((line = bR.readLine()) != null) {
+
+                responseStrBuilder.append(line);
+            }
+            inputStream.close();
+            String result = responseStrBuilder.toString();
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
+            JSONObject obj = jsonArray.getJSONObject(0);
+
+            if(type.equals("POI"))
+            {
+                poi=new POI(obj);
+            }
+            if(type.equals("PARCOURS"))
+            {
+                parcours = new Parcours(obj);
+            }
+            if(type.equals("CITY"))
+            {
+                ville = new Ville(obj);
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void MainPictureDownload(String url, Context context) throws IOException {
         InputStream in = new java.net.URL(url).openStream();
         Bitmap bmp= BitmapFactory.decodeStream(in);
-
-
         bmp = scaleDownBitmap(bmp,30,context);
-
-
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         MainPicture = stream.toByteArray();

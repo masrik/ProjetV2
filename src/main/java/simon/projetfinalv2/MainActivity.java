@@ -1,5 +1,6 @@
 package simon.projetfinalv2;
 
+import android.content.Intent;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,21 +28,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bundle extras = getIntent().getExtras();
-        ArrayList<Destination>destinations= (ArrayList<Destination>) extras.getSerializable("data");
+        final ArrayList<Destination>destinations= (ArrayList<Destination>) extras.getSerializable("data");
          LvList= (ListView) findViewById(R.id.ListView);
 
             final DestinationAdapter adapter = new DestinationAdapter(this, destinations);
             LvList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-        LvList.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(MainActivity.this, position, Toast.LENGTH_LONG);
-                    }
-                }
+        LvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                          @Override
+                                          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                              Intent i = new Intent(MainActivity.this, DetailActivity.class);
+                                              i.putExtra("data", destinations.get(position));
+                                              startActivity(i);
+
+                                          }
+                                      }
+
         );
+
 
     }
 

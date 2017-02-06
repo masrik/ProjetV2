@@ -3,14 +3,15 @@ package simon.projetfinalv2.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 
 /**
  * Created by simon on 21/01/2017.
  */
 
-public class POI extends Destination {
-    String urlDetail;
+public class POI implements Serializable {
     String name;
     String lg;
     String web;
@@ -20,7 +21,11 @@ public class POI extends Destination {
     String tarif;
     String description;
     String duree;
+    String lat;
+    String lon;
 
+
+    public POI(){}
 
     public POI(JSONObject jsonObject) throws JSONException {
         name= jsonObject.getString("name");
@@ -28,22 +33,32 @@ public class POI extends Destination {
         web = jsonObject.getString("web");
         displayPhone=jsonObject.getString("display_phone");
         phone = jsonObject.getString("phone");
-        horaire = jsonObject.getString("horaire");
+        horaire = jsonObject.getString("horaires");
         tarif = jsonObject.getString("tarif");
         description=jsonObject.getString("description");
-        duree = jsonObject.getString("duree");
-        urlDetail = "http://voyage2.corellis.eu/api/v2/poi?id=" + this.getId();
+        duree = jsonObject.getString("visit_duration");
+        JSONObject adresse = (JSONObject) jsonObject.get("location");
+        JSONObject coord = (JSONObject) adresse.get("coords");
+        lat = coord.getString("lat");
+        lon = coord.getString("lon");
+
     }
 
 
-
-
-    public String getUrlDetail() {
-        return urlDetail;
+    public String getLat() {
+        return lat;
     }
 
-    public void setUrlDetail(String urlDetail) {
-        this.urlDetail = urlDetail;
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
     }
 
     public String getName() {
