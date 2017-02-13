@@ -70,8 +70,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         if (destination.getType().equals("POI")) {
             poi = destination.getPoi();
-            Double lat = Double.parseDouble(poi.getLat());
-            Double lon = Double.parseDouble(poi.getLon());
             setContentView(R.layout.poi_detail);
             TextView tvTitre = (TextView) findViewById(R.id.titre);
             tvTitre.setText(poi.getName());

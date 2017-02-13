@@ -70,17 +70,13 @@ public class imageView extends Activity {
                 y2 = touchevent.getY();
 
                 if (x1 < x2) {
-                    if(position != 0 && position !=(photosURL.size()-1)) {
+                    if(position != 0) {
                         position = position - 1;
-                    }
-                    else if( position ==0)
-                    {
-                        position = photosURL.size()-1;
-
                     }
                     else
                     {
-                        position =0;
+                        position = photosURL.size()-1;
+
                     }
                     Glide.with(this).load(photosURL.get(position)).into(imgV);}
 
@@ -94,14 +90,14 @@ public class imageView extends Activity {
                     if(position != 0 && position !=(photosURL.size()-1)) {
                         position = position + 1;
                     }
-                    else if( position == photosURL.size()-1)
+                    else if( position == 0)
                     {
-                        position = 0;
+                        position = 1;
 
                     }
                     else
                     {
-                        position =photosURL.size()-1;
+                        position =0;
                     }
                     Glide.with(this).load(photosURL.get(position)).into(imgV);}
                 }
