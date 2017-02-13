@@ -66,7 +66,7 @@ public class Destination implements Serializable{
         MainPictureURL = obj.getString("media");
         name=obj.getString("display");
         MainPicture=null;
-        MainPictureDownload(MainPictureURL,context);
+
 
     }
     public void GetDetail()
@@ -125,23 +125,7 @@ public class Destination implements Serializable{
         }
     }
 
-    public void MainPictureDownload(String url, Context context) throws IOException {
-        InputStream in = new java.net.URL(url).openStream();
-        Bitmap bmp= BitmapFactory.decodeStream(in);
-        bmp = scaleDownBitmap(bmp,30,context);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        MainPicture = stream.toByteArray();
 
-
-    }
-
-    public Bitmap ConvertToBimap()
-    {
-        Bitmap bmp = BitmapFactory.decodeByteArray(MainPicture, 0, MainPicture.length);
-        return bmp;
-
-    }
 
     public String getMainPictureURL() {
         return MainPictureURL;
@@ -194,17 +178,5 @@ public class Destination implements Serializable{
         type = type;
     }
 
-
-    public static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
-
-        final float densityMultiplier = context.getResources().getDisplayMetrics().density;
-
-        int h= (int) (newHeight*densityMultiplier);
-        int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
-
-        photo=Bitmap.createScaledBitmap(photo, w, h, true);
-
-        return photo;
-    }
 
 }

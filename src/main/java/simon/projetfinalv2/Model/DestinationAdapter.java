@@ -9,8 +9,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
+import simon.projetfinalv2.MainActivity;
 import simon.projetfinalv2.R;
 
 /**
@@ -20,10 +23,13 @@ import simon.projetfinalv2.R;
 public class DestinationAdapter extends BaseAdapter {
     List<Destination> list;
     LayoutInflater inflater;
+    Context context;
+
     public DestinationAdapter(Context context, List<Destination> list)
     {
         inflater = LayoutInflater.from(context);
         this.list=list;
+        this.context = context;
 
     }
     @Override
@@ -51,8 +57,7 @@ public class DestinationAdapter extends BaseAdapter {
         Destination destination = list.get(position);
         TvName.setText(destination.getName());
         TvType.setText(destination.getType());
-        imvMainPhot.setImageBitmap(destination.ConvertToBimap());
-        imvMainPhot.setAdjustViewBounds(true);
+        Glide.with(context).load(destination.getMainPictureURL()).override(300,200).centerCrop().into(imvMainPhot);
 
         return convertView;
 }

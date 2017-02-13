@@ -25,7 +25,7 @@ public class Geolocalisation extends Service implements LocationListener {
     double longitude;
     double latitude;
 
-    private static final long minimunDistance = 10;
+    private static final long minimunDistance =1;
     private static final long minimunTemps = 60000;
 
     protected LocationManager locationManager;

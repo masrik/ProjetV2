@@ -1,5 +1,6 @@
 package simon.projetfinalv2.Model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +24,7 @@ public class POI implements Serializable {
     String duree;
     String lat;
     String lon;
-
+    ArrayList<String> photos;
 
     public POI(){}
 
@@ -41,7 +42,15 @@ public class POI implements Serializable {
         JSONObject coord = (JSONObject) adresse.get("coords");
         lat = coord.getString("lat");
         lon = coord.getString("lon");
-
+      photos = new ArrayList<>();
+        JSONArray medias = (JSONArray) jsonObject.get("medias");
+        for(int i=0; i<medias.length(); i++)
+        {
+           JSONObject obj = medias.getJSONObject(i);
+            String photo = obj.getString("url");
+            photos.add(photo);
+        }
+        System.out.println(photos.size());
     }
 
 
@@ -53,7 +62,16 @@ public class POI implements Serializable {
         this.lat = lat;
     }
 
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
+    }
+
     public String getLon() {
+
         return lon;
     }
 

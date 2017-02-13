@@ -9,13 +9,25 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,13 +40,28 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import simon.projetfinalv2.Model.Destination;
+import simon.projetfinalv2.Model.HorizontalAdapter;
 import simon.projetfinalv2.Model.POI;
+
+import static java.security.AccessController.getContext;
+import static simon.projetfinalv2.R.id.horizontal_recycler_view;
+import static simon.projetfinalv2.R.layout.horizontal_adapter;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private POI poi;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,24 +121,35 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
             TextView TvTitreWeb = (TextView) findViewById(R.id.TitreWeb);
-            TextView TvWeb= ( TextView) findViewById(R.id.web);
-            if(poi.getWeb().equals(""))
-            {
+            TextView TvWeb = (TextView) findViewById(R.id.web);
+            if (poi.getWeb().equals("")) {
                 TvWeb.setVisibility(View.GONE);
                 TvTitreWeb.setVisibility(View.GONE);
-            }
-            else
-            {
+            } else {
                 TvWeb.setText(poi.getWeb());
             }
 
 
-            if(googlePlayServicesAvailable())
-            {
-                Toast.makeText(this, "Perfect !! ", Toast.LENGTH_LONG).show() ;
-
+            if (googlePlayServicesAvailable()) {
 
             }
+
+            final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+            HorizontalAdapter horizontalAdapter = new HorizontalAdapter(this, poi.getPhotos(), new HorizontalAdapter.OnItemClickListener() {
+
+
+                @Override
+                public void onItemClick(List<String> items, int position) {
+                    Intent i = new Intent(DetailActivity.this, imageView.class);
+                    i.putExtra("position", position);
+                    i.putExtra("photosUrl", (Serializable) items);
+                    startActivity(i);
+
+                }
+            });
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(horizontalAdapter);
 
             initMap();
 
@@ -128,7 +166,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                     startActivity(callIntent);
                 }
             });
-            TvWeb.setOnClickListener(new View.OnClickListener(){
+            TvWeb.setOnClickListener(new View.OnClickListener() {
 
 
                 @Override
@@ -143,33 +181,29 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
-    public boolean googlePlayServicesAvailable()
-    {
+    public boolean googlePlayServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
-        int isAvailable= api.isGooglePlayServicesAvailable(this);
-        if( isAvailable== ConnectionResult.SUCCESS)
-        {
+        int isAvailable = api.isGooglePlayServicesAvailable(this);
+        if (isAvailable == ConnectionResult.SUCCESS) {
             return true;
-        }
-        else if(api.isUserResolvableError(isAvailable))
-        {
-            Dialog dialog = api.getErrorDialog(this, isAvailable,0);
+        } else if (api.isUserResolvableError(isAvailable)) {
+            Dialog dialog = api.getErrorDialog(this, isAvailable, 0);
             dialog.show();
-        }
-        else
-        {
-            Toast.makeText(this, "connection impossible au google ply services", Toast.LENGTH_LONG).show() ;
+        } else {
+            Toast.makeText(this, "connection impossible au google ply services", Toast.LENGTH_LONG).show();
         }
         return false;
     }
 
-    public void initMap()
-    {
+    public void initMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapfragment);
-        mapFragment.getMapAsync( this);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -178,9 +212,45 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         double lat = Double.parseDouble(poi.getLat());
         double lon = Double.parseDouble(poi.getLon());
         LatLng coord = new LatLng(lat, lon);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(coord,10);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(coord, 10);
         map.moveCamera(update);
         MarkerOptions options = new MarkerOptions().title(poi.getName()).position(coord);
         map.addMarker(options);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Detail Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
