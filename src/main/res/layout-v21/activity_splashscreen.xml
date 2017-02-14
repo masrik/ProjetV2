@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:color/background_dark" >
@@ -34,8 +33,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="75dp"
         android:layout_above="@+id/textView"
-        android:layout_alignParentEnd="true"
-        tools:targetApi="lollipop" />
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

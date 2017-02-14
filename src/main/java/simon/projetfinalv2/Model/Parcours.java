@@ -1,7 +1,10 @@
 package simon.projetfinalv2.Model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by simon on 21/01/2017.
@@ -10,14 +13,17 @@ import org.json.JSONObject;
 public class Parcours extends Destination{
 
 
-
-    String urlDetail;
     String title;
     String distance;
     String loop;
-    String star;
+    String stars;
     String description;
-    String duree;
+    String lat;
+    String lon;
+    ArrayList<String> photos;
+
+
+    ArrayList<String> Durees;
 
 
 public Parcours(JSONObject jsonObject) throws JSONException {
@@ -25,18 +31,43 @@ public Parcours(JSONObject jsonObject) throws JSONException {
 
     title= jsonObject.getString("title");
     distance = jsonObject.getString("distance");
-    star=jsonObject.getString("stars");
+    stars=jsonObject.getString("stars");
     loop = jsonObject.getString("loop");
     description=jsonObject.getString("description");
-    urlDetail = "http://voyage2.corellis.eu/api/v2/parcours?id=" + this.getId();
+    JSONObject duration = new JSONObject(jsonObject.getString("duration"));
+    Durees = new ArrayList<String>();
+    Durees.add(String.valueOf(duration.get("bicycle")));
+    Durees.add(String.valueOf(duration.get("car")));
+    Durees.add(String.valueOf(duration.get("by_foot")));
+
+    JSONObject adresse = (JSONObject) jsonObject.get("location");
+    JSONObject coord = (JSONObject) adresse.get("coords");
+    lat = coord.getString("lat");
+    lon = coord.getString("lon");
+    photos = new ArrayList<>();
+    JSONArray medias = (JSONArray) jsonObject.get("medias");
+    for(int i=0; i<medias.length(); i++)
+    {
+        JSONObject obj = medias.getJSONObject(i);
+        String photo = obj.getString("url");
+        photos.add(photo);
+    }
 }
 
-    public String getUrlDetail() {
-        return urlDetail;
+    public String getLon() {
+        return lon;
     }
 
-    public void setUrlDetail(String urlDetail) {
-        this.urlDetail = urlDetail;
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
     }
 
     public String getTitle() {
@@ -59,16 +90,24 @@ public Parcours(JSONObject jsonObject) throws JSONException {
         return loop;
     }
 
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
     public void setLoop(String loop) {
         this.loop = loop;
     }
 
-    public String getStar() {
-        return star;
+    public String getStars() {
+        return stars;
     }
 
-    public void setStar(String star) {
-        this.star = star;
+    public void setStars(String stars) {
+        this.stars = stars;
     }
 
     public String getDescription() {
@@ -79,11 +118,11 @@ public Parcours(JSONObject jsonObject) throws JSONException {
         this.description = description;
     }
 
-    public String getDuree() {
-        return duree;
+    public ArrayList<String> getDurees() {
+        return Durees;
     }
 
-    public void setDuree(String duree) {
-        this.duree = duree;
+    public void setDurees(ArrayList<String> durees) {
+        Durees = durees;
     }
 }

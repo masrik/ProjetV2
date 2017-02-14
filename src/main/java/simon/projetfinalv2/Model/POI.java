@@ -25,6 +25,7 @@ public class POI implements Serializable {
     String lat;
     String lon;
     ArrayList<String> photos;
+    String stars;
 
     public POI(){}
 
@@ -38,6 +39,7 @@ public class POI implements Serializable {
         tarif = jsonObject.getString("tarif");
         description=jsonObject.getString("description");
         duree = jsonObject.getString("visit_duration");
+        stars = jsonObject.getString("stars");
         JSONObject adresse = (JSONObject) jsonObject.get("location");
         JSONObject coord = (JSONObject) adresse.get("coords");
         lat = coord.getString("lat");
@@ -53,6 +55,13 @@ public class POI implements Serializable {
         System.out.println(photos.size());
     }
 
+    public String getStars() {
+        return stars;
+    }
+
+    public void setStars(String stars) {
+        this.stars = stars;
+    }
 
     public String getLat() {
         return lat;

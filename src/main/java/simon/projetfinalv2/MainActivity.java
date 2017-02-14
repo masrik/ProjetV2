@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         final ArrayList<Destination>destinations= (ArrayList<Destination>) extras.getSerializable("data");
          LvList= (ListView) findViewById(R.id.ListView);
-
             final DestinationAdapter adapter = new DestinationAdapter(this, destinations);
             LvList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
                                       }
 
         );
+
+
 
 
     }

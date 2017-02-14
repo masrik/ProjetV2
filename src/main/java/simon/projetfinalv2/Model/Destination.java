@@ -34,35 +34,18 @@ public class Destination implements Serializable{
     private POI poi;
     private Parcours parcours;
     private Ville ville;
+
     public Destination(){};
 
-    public POI getPoi() {
-        return poi;
-    }
 
-    public void setPoi(POI poi) {
-        this.poi = poi;
-    }
-
-    public Parcours getParcours() {
-        return parcours;
-    }
-
-    public void setParcours(Parcours parcours) {
-        this.parcours = parcours;
-    }
-
-    public Ville getVille() {
-        return ville;
-    }
-
-    public void setVille(Ville ville) {
-        this.ville = ville;
-    }
 
     public  Destination(JSONObject obj, Context context) throws JSONException, IOException {
         id=obj.getString("id");
         type = obj.getString("type");
+        if(type.equals("ADMIN"))
+        {
+            type = "CITY";
+        }
         MainPictureURL = obj.getString("media");
         name=obj.getString("display");
         MainPicture=null;
@@ -100,19 +83,23 @@ public class Destination implements Serializable{
             inputStream.close();
             String result = responseStrBuilder.toString();
             JSONObject jsonObject = new JSONObject(result);
-            JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
-            JSONObject obj = jsonArray.getJSONObject(0);
+
 
             if(type.equals("POI"))
             {
+                JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
+                JSONObject obj = jsonArray.getJSONObject(0);
                 poi=new POI(obj);
+
             }
             if(type.equals("PARCOURS"))
             {
-                parcours = new Parcours(obj);
+                JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
+                JSONObject obj = jsonArray.getJSONObject(0);                parcours = new Parcours(obj);
             }
             if(type.equals("CITY"))
             {
+                JSONObject obj = new JSONObject(jsonObject.getString("data"));
                 ville = new Ville(obj);
             }
 
@@ -126,7 +113,29 @@ public class Destination implements Serializable{
     }
 
 
+    public POI getPoi() {
+        return poi;
+    }
 
+    public void setPoi(POI poi) {
+        this.poi = poi;
+    }
+
+    public Parcours getParcours() {
+        return parcours;
+    }
+
+    public void setParcours(Parcours parcours) {
+        this.parcours = parcours;
+    }
+
+    public Ville getVille() {
+        return ville;
+    }
+
+    public void setVille(Ville ville) {
+        this.ville = ville;
+    }
     public String getMainPictureURL() {
         return MainPictureURL;
     }

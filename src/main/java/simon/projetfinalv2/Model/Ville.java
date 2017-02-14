@@ -1,7 +1,10 @@
 package simon.projetfinalv2.Model;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by simon on 21/01/2017.
@@ -9,33 +12,69 @@ import org.json.JSONObject;
 
 public class Ville extends Destination {
 
-    String urlDetail;
     String name;
-    String lg;
     String country;
     String description;
     String star;
     String nbPOI;
     String nbParcours;
+    String stars;
+    String lat;
+    String lon;
+    ArrayList<String> photos;
+
     public Ville(JSONObject jsonObject) throws JSONException {
 
         name= jsonObject.getString("name");
-        lg =jsonObject.getString("lg");
         country = jsonObject.getString("country");
         star=jsonObject.getString("stars");
-        nbPOI = jsonObject.getString("nbPOis");
+        nbPOI = jsonObject.getString("nbPois");
         nbParcours = jsonObject.getString("nbParcours");
         description=jsonObject.getString("description");
-        urlDetail = "http://voyage2.corellis.eu/api/v2/destination?id=" + this.getId();
+        stars = jsonObject.getString("stars");
+        JSONObject coord = (JSONObject) jsonObject.get("location");
+        lat = coord.getString("lat");
+        lon = coord.getString("lon");
+        photos = new ArrayList<>();
+        JSONArray medias = (JSONArray) jsonObject.get("medias");
+        for(int i=0; i<medias.length(); i++)
+        {
+            JSONObject obj = medias.getJSONObject(i);
+            String photo = obj.getString("url");
+            photos.add(photo);
+        }
     }
 
-
-    public String getUrlDetail() {
-        return urlDetail;
+    public String getStars() {
+        return stars;
     }
 
-    public void setUrlDetail(String urlDetail) {
-        this.urlDetail = urlDetail;
+    public void setStars(String stars) {
+        this.stars = stars;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
     }
 
     public String getName() {
@@ -44,14 +83,6 @@ public class Ville extends Destination {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLg() {
-        return lg;
-    }
-
-    public void setLg(String lg) {
-        this.lg = lg;
     }
 
     public String getCountry() {

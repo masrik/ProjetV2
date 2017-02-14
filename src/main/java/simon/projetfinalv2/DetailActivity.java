@@ -47,15 +47,20 @@ import java.util.List;
 import simon.projetfinalv2.Model.Destination;
 import simon.projetfinalv2.Model.HorizontalAdapter;
 import simon.projetfinalv2.Model.POI;
+import simon.projetfinalv2.Model.Parcours;
+import simon.projetfinalv2.Model.Ville;
 
 import static java.security.AccessController.getContext;
 import static simon.projetfinalv2.R.id.horizontal_recycler_view;
 import static simon.projetfinalv2.R.layout.horizontal_adapter;
+import static simon.projetfinalv2.R.layout.parcours_detail;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private POI poi;
+    private Ville ville;
+    private Parcours parcours;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -67,7 +72,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         final Destination destination = (Destination) extras.getSerializable("data");
-
         if (destination.getType().equals("POI")) {
             poi = destination.getPoi();
             setContentView(R.layout.poi_detail);
@@ -84,6 +88,30 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 TvTitreHoraire.setVisibility(View.GONE);
             } else {
                 TvHoraire.setText(poi.getHoraire());
+            }
+
+            TextView Tvduree = (TextView) findViewById(R.id.visit_duration);
+            TextView TvTitreduree =( TextView) findViewById(R.id.Titrevisit_duration);
+            if(poi.getDuree().equals(""))
+            {
+                Tvduree.setVisibility(View.GONE);
+                TvTitreduree.setVisibility(View.GONE);
+            }
+            else
+            {
+                Tvduree.setText(poi.getDuree());
+            }
+
+            TextView TvRating = (TextView)findViewById(R.id.rating);
+            TextView TvTitreRating = ( TextView) findViewById(R.id.TitreRating);
+            if(poi.getStars().equals(""))
+            {
+                TvRating.setVisibility(View.GONE);
+                TvTitreRating.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvRating.setText(poi.getStars());
             }
 
             TextView TvTitreTarif = (TextView) findViewById(R.id.TitreTarif);
@@ -128,9 +156,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             }
 
 
-            if (googlePlayServicesAvailable()) {
-
-            }
 
             final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
             HorizontalAdapter horizontalAdapter = new HorizontalAdapter(this, poi.getPhotos(), new HorizontalAdapter.OnItemClickListener() {
@@ -179,6 +204,192 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
         }
+
+        else if (destination.getType().equals("CITY"))
+        {
+
+            setContentView(R.layout.ville_detail);
+            ville = destination.getVille();
+            TextView tvTitre = (TextView) findViewById(R.id.titre);
+            tvTitre.setText(ville.getName());
+            tvTitre.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+
+            TextView tvDescription = (TextView) findViewById(R.id.Description);
+            tvDescription.setText(ville.getDescription());
+
+            TextView TvTittreNbPoi = ( TextView) findViewById(R.id.TitreNbPOI);
+            TextView TvNbPOI = (TextView) findViewById(R.id.nbPOI);
+
+            if(ville.getNbPOI().equals("0"))
+            {
+                TvTittreNbPoi.setVisibility(View.GONE);
+                TvNbPOI.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvNbPOI.setText(ville.getNbPOI());
+            }
+
+            TextView TvTitreCountry = (TextView) findViewById(R.id.TitreCountry);
+            TextView TvCountry = (TextView) findViewById(R.id.country);
+            if(ville.getCountry().equals(""))
+            {
+                TvTitreCountry.setVisibility(View.GONE);
+                TvCountry.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvCountry.setText(ville.getCountry());
+            }
+
+            TextView TvTittreNbParcours= ( TextView) findViewById(R.id.TitreNbParcours);
+            TextView TvNbParcours = (TextView) findViewById(R.id.nbParcours);
+
+
+            if(ville.getNbParcours().equals("0"))
+            {
+                TvTittreNbParcours.setVisibility(View.GONE);
+                TvNbParcours.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvNbParcours.setText(ville.getNbPOI());
+            }
+
+            TextView TvRating = (TextView)findViewById(R.id.rating);
+            TextView TvTitreRating = ( TextView) findViewById(R.id.TitreRating);
+            if(ville.getStars().equals(""))
+            {
+                TvRating.setVisibility(View.GONE);
+                TvTitreRating.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvRating.setText(ville.getStars());
+            }
+
+            final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+            HorizontalAdapter horizontalAdapter = new HorizontalAdapter(this, ville.getPhotos(), new HorizontalAdapter.OnItemClickListener() {
+
+
+                @Override
+                public void onItemClick(List<String> items, int position) {
+                    Intent i = new Intent(DetailActivity.this, imageView.class);
+                    i.putExtra("position", position);
+                    i.putExtra("photosUrl", (Serializable) items);
+                    startActivity(i);
+
+                }
+            });
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(horizontalAdapter);
+
+            initMap();
+
+
+
+
+        }
+        if (destination.getType().equals("PARCOURS"))
+        {
+            setContentView(R.layout.parcours_detail);
+            parcours = destination.getParcours();
+            TextView tvTitre = (TextView) findViewById(R.id.titre);
+            tvTitre.setText(parcours.getTitle());
+            tvTitre.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+
+            TextView tvDescription = (TextView) findViewById(R.id.Description);
+            tvDescription.setText(parcours.getDescription());
+
+            TextView tvTitreDuree = (TextView) findViewById(R.id.TitreDuration);
+            TextView tvDuration = (TextView)  findViewById(R.id.Duration);
+                String text="";
+                if(!parcours.getDurees().get(0).equals("0"))
+                {
+                    text = text +"En Vélo : " + parcours.getDurees().get(0) + " minutes \n";
+                }
+                if(!parcours.getDurees().get(1).equals("0"))
+                {
+                    text = text + "En voiture : " + parcours.getDurees().get(1) + " minutes \n";
+                }
+                if(!parcours.getDurees().get(2).equals("0"))
+                {
+                    text = text + "A pied : " + parcours.getDurees().get(2) + " minutes \n";
+                }
+                if(text.equals(""))
+                {
+                    tvTitreDuree.setVisibility(View.GONE);
+                    tvDuration.setVisibility(View.GONE);
+                }
+
+            tvDuration.setText(text);
+
+            TextView TvTitreRating = (TextView) findViewById(R.id.TitreRating);
+            TextView TvRating = (TextView) findViewById(R.id.rating);
+            if( parcours.getStars().equals("0"))
+            {
+                TvTitreRating.setVisibility(View.GONE);
+                TvRating.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvRating.setText(parcours.getStars());
+            }
+            TextView TvDistance = (TextView) findViewById(R.id.Distance);
+            TextView TvTitreDistance = (TextView) findViewById(R.id.TitreDistance);
+            if(parcours.getDistance().equals("0"))
+            {
+                TvDistance.setVisibility(View.GONE);
+                TvTitreDistance.setVisibility(View.GONE);
+            }
+            else{
+                TvDistance.setText(parcours.getDistance());
+            }
+
+            TextView TvLoop = (TextView) findViewById(R.id.Loop);
+            TextView TvTitreLoop = (TextView) findViewById(R.id.TitreLoop);
+            if(parcours.getLoop().equals(""))
+            {
+                TvLoop.setVisibility(View.GONE);
+                TvTitreLoop.setVisibility(View.GONE);
+            }
+            else
+            {
+                TvLoop.setText(parcours.getLoop());
+            }
+            final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.horizontal_recycler_view);
+            HorizontalAdapter horizontalAdapter = new HorizontalAdapter(this, parcours.getPhotos(), new HorizontalAdapter.OnItemClickListener() {
+
+
+                @Override
+                public void onItemClick(List<String> items, int position) {
+                    Intent i = new Intent(DetailActivity.this, imageView.class);
+                    i.putExtra("position", position);
+                    i.putExtra("photosUrl", (Serializable) items);
+                    startActivity(i);
+
+                }
+            });
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(horizontalAdapter);
+
+            initMap();
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -207,13 +418,38 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        double lat = Double.parseDouble(poi.getLat());
-        double lon = Double.parseDouble(poi.getLon());
-        LatLng coord = new LatLng(lat, lon);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(coord, 10);
-        map.moveCamera(update);
-        MarkerOptions options = new MarkerOptions().title(poi.getName()).position(coord);
-        map.addMarker(options);
+        double lat;
+        double lon;
+        if(poi != null){
+            lat = Double.parseDouble(poi.getLat());
+            lon = Double.parseDouble(poi.getLon());
+            LatLng coord = new LatLng(lat, lon);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(coord, 10);
+            map.moveCamera(update);
+            MarkerOptions options = new MarkerOptions().title(poi.getName()).position(coord);
+            map.addMarker(options);}
+        else if (ville !=null)
+        {
+            lat = Double.parseDouble(ville.getLat());
+            lon = Double.parseDouble(ville.getLon());
+            LatLng coord = new LatLng(lat, lon);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(coord, 10);
+            map.moveCamera(update);
+            MarkerOptions options = new MarkerOptions().title(ville.getName()).position(coord);
+            map.addMarker(options);
+        }
+        else if ( parcours!=null)
+        {
+
+            lat = Double.parseDouble(parcours.getLat());
+            lon = Double.parseDouble(parcours.getLon());
+            LatLng coord = new LatLng(lat, lon);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(coord, 10);
+            map.moveCamera(update);
+            MarkerOptions options = new MarkerOptions().title(parcours.getName()).position(coord);
+            map.addMarker(options);
+        }
+
     }
 
     /**

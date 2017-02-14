@@ -36,7 +36,7 @@ public class SplashscreenAct extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
         mProgressBar = (ProgressBar) findViewById(R.id.pBAsync);
 
-        new BackgroundSplashTask(this).execute();
+        new BackgroundSplashTask(this, 0).execute();
 
     }
 
@@ -44,7 +44,7 @@ public class SplashscreenAct extends AppCompatActivity {
      * Async Task: can be used to load DB, images during which the splash screen
      * is shown to user
      */
-    private class BackgroundSplashTask extends AsyncTask<Void, Integer, List<Destination>> {
+    class BackgroundSplashTask extends AsyncTask<Void, Integer, List<Destination>> {
         Context mcontext;
         String result;
         double longitude;
@@ -54,9 +54,10 @@ public class SplashscreenAct extends AppCompatActivity {
         ArrayList<Destination> listDestination ;
 
 
-        public BackgroundSplashTask(Context context){
+        public BackgroundSplashTask(Context context, double offset){
             this.mcontext=context;
             this.listDestination = new ArrayList<Destination>();
+            this.offset = offset;
 
         }
 
@@ -72,7 +73,7 @@ public class SplashscreenAct extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Integer... values) {
             //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                mProgressBar.setMax(nombredeDestination);
+                mProgressBar.setMax(2*nombredeDestination);
                 mProgressBar.setProgress(values[0]);
 
 
@@ -81,7 +82,7 @@ public class SplashscreenAct extends AppCompatActivity {
         @Override
         protected List<Destination> doInBackground(Void... params) {
 
-            String url = "http://voyage2.corellis.eu/api/v2/homev2?lat="+latitude+"&lon="+longitude+"&offset=50";
+            String url = "http://voyage2.corellis.eu/api/v2/homev2?lat="+latitude+"&lon="+longitude+"&offset="+offset;
             try {
                URL urlObj = new URL(url);
                 HttpURLConnection urlConnection = (HttpURLConnection) urlObj.openConnection();
@@ -106,24 +107,28 @@ public class SplashscreenAct extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonArray = new JSONArray(jsonObject.getString("data"));
+                offset = Double.valueOf(jsonObject.getString("offset"));
                 nombredeDestination = jsonArray.length();
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject obj = jsonArray.getJSONObject(i);
-                    Destination destination = new Destination(obj, mcontext);
-                    //les trucs de type GEOLOC sont vides et inutiles
+                    if(!obj.getString("type").equals("GEOLOC")) {
+                        Destination destination = new Destination(obj, mcontext);
+                        //les trucs de type GEOLOC sont vides et inutiles
 
-                    Log.d("Probleme", "test1");
-                    listDestination.add(destination);
-                    Log.d("Probleme", "test2");
+                        Log.d("Probleme", "test1");
+                        listDestination.add(destination);
+                        Log.d("Probleme", "test2");
 
-
+                    }
                     publishProgress(i);
 
 
                 }
                 for(int i = 0; i<listDestination.size(); i++)
                 {
+                    publishProgress(nombredeDestination +i);
+
                     listDestination.get(i).GetDetail();
                 }
 
@@ -150,6 +155,7 @@ public class SplashscreenAct extends AppCompatActivity {
             // any info loaded can during splash_show
             // can be passed to main activity using
             // below
+                i.putExtra("offset", offset);
             i.putExtra("data", listDestination);
             startActivity(i);
             finish();

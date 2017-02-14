@@ -4,9 +4,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,10 +39,10 @@
         android:id="@+id/Description" />
 
     <TextView
-        android:text="Horaire "
+        android:text="Pays "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/titreHoraire"
+        android:id="@+id/TitreCountry"
         android:textStyle="normal|bold"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp" />
@@ -54,22 +51,9 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Horaire"
+        android:id="@+id/country"
         android:textSize="14sp" />
 
-    <TextView
-        android:text="Durée de la visite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Titrevisit_duration"
-        android:textSize="18sp"
-        android:textStyle="normal|bold"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/visit_duration" />
 
     <TextView
         android:text="Notes"
@@ -86,10 +70,26 @@
         android:id="@+id/rating" />
 
     <TextView
-        android:text="Tarif"
+        android:text="Nombre de point d'intérêt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/TitreTarif"
+        android:id="@+id/TitreNbPOI"
+        android:textSize="18sp"
+        android:textStyle="normal|bold"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nbPOI" />
+
+
+
+    <TextView
+        android:text="Nombre de parcours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TitreNbParcours"
         android:textSize="18sp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textStyle="normal|bold" />
@@ -98,52 +98,9 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Tarif" />
+        android:id="@+id/nbParcours" />
 
-    <TextView
-        android:text="Langue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/TitreLangue"
-        android:textSize="18sp"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textStyle="normal|bold" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Langue" />
-
-    <TextView
-        android:text="Téléphone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/TitreTéléphone"
-        android:textSize="18sp"
-        android:textStyle="normal|bold"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="phone"
-        android:linksClickable="true"
-        android:id="@+id/Telephone" />
-
-    <TextView
-        android:text="Site Internet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/TitreWeb"
-        android:textSize="18sp"
-        android:textStyle="normal|bold"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/web" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/horizontal_recycler_view"

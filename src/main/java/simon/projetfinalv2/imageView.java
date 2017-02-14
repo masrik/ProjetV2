@@ -85,8 +85,6 @@ public class imageView extends Activity {
 
                 // if right to left sweep event on screen
                 if (x1 > x2) {
-                    Toast.makeText(this, "Right to Left Swap Performed", Toast.LENGTH_LONG).show();
-
                     if(position != 0 && position !=(photosURL.size()-1)) {
                         position = position + 1;
                     }
